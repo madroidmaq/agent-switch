@@ -1,0 +1,63 @@
+{
+  "name": "agent-switch",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI Agent 配置切换器 - 支持 Claude Code, Copilot, Gemini 等",
+  "bin": {
+    "agent-switch": "./dist/index.mjs"
+  },
+  "scripts": {
+    "dev": "tsx src/index.tsx",
+    "build": "tsx scripts/build.ts",
+    "start": "node dist/index.mjs",
+    "test": "node dist/index.mjs",
+    "debug": "tsx src/index.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "ai-agent",
+    "claude",
+    "claude-code",
+    "copilot",
+    "gemini",
+    "cli",
+    "tui",
+    "switcher",
+    "config-manager"
+  ],
+  "author": "madroid <madroidmaq@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madroidmaq/agent-switch.git"
+  },
+  "homepage": "https://github.com/madroidmaq/agent-switch#readme",
+  "bugs": {
+    "url": "https://github.com/madroidmaq/agent-switch/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "ink": "^4.4.1",
+    "react": "^18.2.0",
+    "ink-text-input": "^5.0.1",
+    "ink-spinner": "^5.0.0",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "tsx": "^4.7.0",
+    "esbuild": "^0.19.0"
+  }
+}
