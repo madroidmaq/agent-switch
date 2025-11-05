@@ -17,24 +17,24 @@ export function formatServiceConfig(
 ): string[] {
   const lines: string[] = [];
 
-  const nameValue = dimmed ? chalk.gray.bold(serviceName) : chalk.bold(serviceName);
+  const nameValue = dimmed ? chalk.cyan.dim.bold(serviceName) : chalk.bold(serviceName);
   const scopeValue = scope === 'global' ? 'Global' : 'Local';
-  const dimColor = dimmed ? chalk.gray : chalk.gray;
+  const dimColor = dimmed ? chalk.cyan.dim : chalk.gray;
 
   lines.push(`Name:     ${nameValue}`);
-  lines.push(dimmed ? chalk.gray(`Scope:    ${scopeValue}`) : `Scope:    ${scopeValue}`);
+  lines.push(dimmed ? chalk.cyan.dim(`Scope:    ${scopeValue}`) : `Scope:    ${scopeValue}`);
 
   if (preset.forceLoginMethod === 'claudeai') {
     const typeText = `Type:     Official Claude.ai Service`;
-    lines.push(dimmed ? chalk.gray(typeText) : typeText);
+    lines.push(dimmed ? chalk.cyan.dim(typeText) : typeText);
   } else {
     const apiText = `API:      ${preset.env.ANTHROPIC_BASE_URL || 'N/A'}`;
     const modelText = `Model:    ${preset.env.ANTHROPIC_MODEL || 'N/A'}`;
     const fastText = `Fast:     ${preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A'}`;
 
-    lines.push(dimmed ? chalk.gray(apiText) : `API:      ${dimColor(preset.env.ANTHROPIC_BASE_URL || 'N/A')}`);
-    lines.push(dimmed ? chalk.gray(modelText) : `Model:    ${dimColor(preset.env.ANTHROPIC_MODEL || 'N/A')}`);
-    lines.push(dimmed ? chalk.gray(fastText) : `Fast:     ${dimColor(preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A')}`);
+    lines.push(dimmed ? chalk.cyan.dim(apiText) : `API:      ${dimColor(preset.env.ANTHROPIC_BASE_URL || 'N/A')}`);
+    lines.push(dimmed ? chalk.cyan.dim(modelText) : `Model:    ${dimColor(preset.env.ANTHROPIC_MODEL || 'N/A')}`);
+    lines.push(dimmed ? chalk.cyan.dim(fastText) : `Fast:     ${dimColor(preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A')}`);
   }
 
   return lines;
@@ -55,8 +55,8 @@ export function displayServiceConfig(
   scope: 'global' | 'local',
   dimmed: boolean = false
 ): void {
-  const titleSuffix = dimmed ? chalk.gray(' (overridden by local config)') : '';
-  const titleText = dimmed ? chalk.gray.bold(`\n${title}:${titleSuffix}`) : chalk.bold.cyan(`\n${title}:`);
+  const titleSuffix = dimmed ? chalk.cyan.dim(' (overridden by local config)') : '';
+  const titleText = dimmed ? chalk.cyan.dim.bold(`\n${title}:${titleSuffix}`) : chalk.bold.cyan(`\n${title}:`);
   console.log(titleText);
   const lines = formatServiceConfig(serviceName, preset, scope, dimmed);
   lines.forEach(line => console.log(line));
