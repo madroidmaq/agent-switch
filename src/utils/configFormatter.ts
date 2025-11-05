@@ -6,24 +6,35 @@ import type { Preset } from '../core/types';
  * @param serviceName Service name
  * @param preset Preset configuration
  * @param scope Scope ('global' or 'local')
+ * @param dimmed Whether to display in dimmed/gray style (indicating overridden)
  * @returns Formatted string array
  */
 export function formatServiceConfig(
   serviceName: string,
   preset: Preset,
-  scope: 'global' | 'local'
+  scope: 'global' | 'local',
+  dimmed: boolean = false
 ): string[] {
   const lines: string[] = [];
 
-  lines.push(`Name:     ${chalk.bold(serviceName)}`);
-  lines.push(`Scope:    ${scope === 'global' ? 'Global' : 'Local'}`);
+  const nameValue = dimmed ? chalk.gray.bold(serviceName) : chalk.bold(serviceName);
+  const scopeValue = scope === 'global' ? 'Global' : 'Local';
+  const dimColor = dimmed ? chalk.gray : chalk.gray;
+
+  lines.push(`Name:     ${nameValue}`);
+  lines.push(dimmed ? chalk.gray(`Scope:    ${scopeValue}`) : `Scope:    ${scopeValue}`);
 
   if (preset.forceLoginMethod === 'claudeai') {
-    lines.push(`Type:     Official Claude.ai Service`);
+    const typeText = `Type:     Official Claude.ai Service`;
+    lines.push(dimmed ? chalk.gray(typeText) : typeText);
   } else {
-    lines.push(`API:      ${chalk.gray(preset.env.ANTHROPIC_BASE_URL || 'N/A')}`);
-    lines.push(`Model:    ${chalk.gray(preset.env.ANTHROPIC_MODEL || 'N/A')}`);
-    lines.push(`Fast:     ${chalk.gray(preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A')}`);
+    const apiText = `API:      ${preset.env.ANTHROPIC_BASE_URL || 'N/A'}`;
+    const modelText = `Model:    ${preset.env.ANTHROPIC_MODEL || 'N/A'}`;
+    const fastText = `Fast:     ${preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A'}`;
+
+    lines.push(dimmed ? chalk.gray(apiText) : `API:      ${dimColor(preset.env.ANTHROPIC_BASE_URL || 'N/A')}`);
+    lines.push(dimmed ? chalk.gray(modelText) : `Model:    ${dimColor(preset.env.ANTHROPIC_MODEL || 'N/A')}`);
+    lines.push(dimmed ? chalk.gray(fastText) : `Fast:     ${dimColor(preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A')}`);
   }
 
   return lines;
@@ -35,15 +46,19 @@ export function formatServiceConfig(
  * @param serviceName Service name
  * @param preset Preset configuration
  * @param scope Scope
+ * @param dimmed Whether to display in dimmed/gray style (indicating overridden by local config)
  */
 export function displayServiceConfig(
   title: string,
   serviceName: string,
   preset: Preset,
-  scope: 'global' | 'local'
+  scope: 'global' | 'local',
+  dimmed: boolean = false
 ): void {
-  console.log(chalk.bold.cyan(`\n${title}:`));
-  const lines = formatServiceConfig(serviceName, preset, scope);
+  const titleSuffix = dimmed ? chalk.gray(' (overridden by local config)') : '';
+  const titleText = dimmed ? chalk.gray.bold(`\n${title}:${titleSuffix}`) : chalk.bold.cyan(`\n${title}:`);
+  console.log(titleText);
+  const lines = formatServiceConfig(serviceName, preset, scope, dimmed);
   lines.forEach(line => console.log(line));
   console.log();
 }
