@@ -5,3 +5,6 @@ dist/
 *.tsbuildinfo
 .env
 .env.local
+
+# Local Claude Code configuration (project-specific settings)
+.claude/settings.local.json
