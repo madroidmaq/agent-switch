@@ -11,24 +11,28 @@ async function displayCurrentConfigs(): Promise<void> {
 
   let hasAnyConfig = false;
 
-  // Display global configuration
-  const globalId = await serviceSwitcher.getCurrentServiceId('global');
-  const globalPreset = presetsManager.get(globalId);
+  // Check if local configuration exists
+  const hasLocalConfig = serviceSwitcher.configExists('local');
 
-  if (globalPreset) {
-    displayServiceConfig('Global Configuration', globalId, globalPreset, 'global');
-    hasAnyConfig = true;
-  }
-
-  // Display local configuration (if exists)
-  if (serviceSwitcher.configExists('local')) {
+  // Display local configuration first (higher priority)
+  if (hasLocalConfig) {
     const localId = await serviceSwitcher.getCurrentServiceId('local');
     const localPreset = presetsManager.get(localId);
 
     if (localPreset) {
-      displayServiceConfig('Local Configuration', localId, localPreset, 'local');
+      displayServiceConfig('Local Configuration', localId, localPreset, 'local', false);
       hasAnyConfig = true;
     }
+  }
+
+  // Display global configuration (if local exists, display in gray)
+  const globalId = await serviceSwitcher.getCurrentServiceId('global');
+  const globalPreset = presetsManager.get(globalId);
+
+  if (globalPreset) {
+    // If local config exists, display global in gray (indicating it's overridden)
+    displayServiceConfig('Global Configuration', globalId, globalPreset, 'global', hasLocalConfig);
+    hasAnyConfig = true;
   }
 
   // If no configuration found
