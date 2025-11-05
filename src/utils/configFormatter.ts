@@ -17,24 +17,24 @@ export function formatServiceConfig(
 ): string[] {
   const lines: string[] = [];
 
-  const nameValue = dimmed ? chalk.cyan.dim.bold(serviceName) : chalk.bold(serviceName);
+  const nameValue = dimmed ? chalk.gray.bold(serviceName) : chalk.bold(serviceName);
   const scopeValue = scope === 'global' ? 'Global' : 'Local';
-  const dimColor = dimmed ? chalk.cyan.dim : chalk.gray;
+  const dimColor = chalk.gray;
 
   lines.push(`Name:     ${nameValue}`);
-  lines.push(dimmed ? chalk.cyan.dim(`Scope:    ${scopeValue}`) : `Scope:    ${scopeValue}`);
+  lines.push(dimmed ? chalk.gray(`Scope:    ${scopeValue}`) : `Scope:    ${scopeValue}`);
 
   if (preset.forceLoginMethod === 'claudeai') {
     const typeText = `Type:     Official Claude.ai Service`;
-    lines.push(dimmed ? chalk.cyan.dim(typeText) : typeText);
+    lines.push(dimmed ? chalk.gray(typeText) : typeText);
   } else {
     const apiText = `API:      ${preset.env.ANTHROPIC_BASE_URL || 'N/A'}`;
     const modelText = `Model:    ${preset.env.ANTHROPIC_MODEL || 'N/A'}`;
     const fastText = `Fast:     ${preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A'}`;
 
-    lines.push(dimmed ? chalk.cyan.dim(apiText) : `API:      ${dimColor(preset.env.ANTHROPIC_BASE_URL || 'N/A')}`);
-    lines.push(dimmed ? chalk.cyan.dim(modelText) : `Model:    ${dimColor(preset.env.ANTHROPIC_MODEL || 'N/A')}`);
-    lines.push(dimmed ? chalk.cyan.dim(fastText) : `Fast:     ${dimColor(preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A')}`);
+    lines.push(dimmed ? chalk.gray(apiText) : `API:      ${dimColor(preset.env.ANTHROPIC_BASE_URL || 'N/A')}`);
+    lines.push(dimmed ? chalk.gray(modelText) : `Model:    ${dimColor(preset.env.ANTHROPIC_MODEL || 'N/A')}`);
+    lines.push(dimmed ? chalk.gray(fastText) : `Fast:     ${dimColor(preset.env.ANTHROPIC_SMALL_FAST_MODEL || 'N/A')}`);
   }
 
   return lines;
