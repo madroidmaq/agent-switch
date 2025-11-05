@@ -14,7 +14,7 @@ import { useServiceSwitch } from '../hooks/useServiceSwitch';
 import { serviceSwitcher } from '../core/instances';
 import type { AppMode, Scope, ServiceItem } from '../core/types';
 import { theme } from '../constants/theme';
-import { CONFIG_PATHS } from '../constants/config';
+import { CONFIG_PATHS, UI_CONFIG } from '../constants/config';
 import { openInEditor } from '../utils/openInEditor';
 import { openInBrowser } from '../utils/openInBrowser';
 
@@ -89,7 +89,6 @@ export const App: React.FC = () => {
 
       // H - help
       if (input.toLowerCase() === 'h') {
-        const { UI_CONFIG } = await import('../constants/config');
         openInBrowser(UI_CONFIG.HELP_URL).catch((error) => {
           console.error('Failed to open browser:', error);
         });
