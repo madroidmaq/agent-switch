@@ -64,7 +64,7 @@ program
  */
 program
   .command('use <service>')
-  .description('Quickly switch to specified service (without TUI)')
+  .description('Quickly switch to specified service (default: global scope)')
   .option('-l, --local', 'Local switch (current project only)')
   .option('-g, --global', 'Global switch (all projects, default)')
   .action(async (service: string, options: { global?: boolean; local?: boolean }) => {
@@ -107,15 +107,29 @@ program
 program
   .command('list')
   .alias('ls')
-  .description('List all available services')
-  .action(async () => {
+  .description('List all available services with activation status')
+  .option('-l, --local', 'Show local scope activation status')
+  .option('-g, --global', 'Show global scope activation status')
+  .action(async (options: { global?: boolean; local?: boolean }) => {
     try {
       await presetsManager.load();
 
-      const currentId = await serviceSwitcher.getCurrentServiceId('global');
+      // Smart default: if local config exists, prioritize showing local activation status
+      const hasLocal = serviceSwitcher.configExists('local');
+      const scope = options.local ? 'local' :
+                    options.global ? 'global' :
+                    (hasLocal ? 'local' : 'global');
+
+      const currentId = await serviceSwitcher.getCurrentServiceId(scope);
       const services = presetsManager.getServiceList(currentId);
 
-      console.log(chalk.bold.cyan('\nAvailable Services:\n'));
+      // Display current scope
+      const scopeLabel = scope === 'local' ? 'Local' : 'Global';
+      const scopeInfo = hasLocal && !options.global && !options.local
+        ? ` (${scopeLabel} scope - detected local config)`
+        : ` (${scopeLabel} scope)`;
+
+      console.log(chalk.bold.cyan(`\nAvailable Services${scopeInfo}:\n`));
 
       services.forEach((service) => {
         // Use fixed spacing: show "✓ " for active, "  " (two spaces) for inactive
@@ -139,7 +153,7 @@ program
  */
 program
   .command('current')
-  .description('Display currently active service')
+  .description('Display currently active service (default: all scopes)')
   .option('-l, --local', 'Show local service only')
   .option('-g, --global', 'Show global service only')
   .action(async (options: { global?: boolean; local?: boolean }) => {
